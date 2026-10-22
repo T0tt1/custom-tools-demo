@@ -8,9 +8,11 @@ A loyalty shop assistant. Claude can only look up a customer, check points, list
 git clone https://github.com/T0tt1/custom-tools-demo && cd custom-tools-demo
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-export ANTHROPIC_API_KEY=sk-ant-...
-python step2_manual_loop.py        # dry run once, so you know the network and key work
+export ANTHROPIC_API_KEY=sk-ant-...  # optional, see below
+python step2_manual_loop.py        # dry run once, so you know the network and credentials work
 ```
+
+**Credentials:** if `ANTHROPIC_API_KEY` is set, the demo uses the Claude API. If it isn't, it uses Amazon Bedrock with your current AWS credentials (region `us-east-1`, or `AWS_REGION`). Your AWS role needs Bedrock access to `anthropic.claude-opus-5-5`.
 
 Use a large terminal font, a dark theme, and have `shop.py` open in an editor next to the terminal.
 
@@ -69,5 +71,5 @@ It prints the schema generated from the type hints and docstring, then runs the 
 
 ## Tech notes
 - Model: `claude-opus-5-5` at `effort: low`, to keep the demo fast. Raise the effort for harder tasks.
-- `fallbacks: "default"`: if a safety classifier declines a request, the API re-runs it on another model.
+- `fallbacks: "default"` (Claude API only): if a safety classifier declines a request, the API re-runs it on another model.
 - Each run costs a few cents. The fake DB resets every time a script starts.

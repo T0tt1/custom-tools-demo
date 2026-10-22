@@ -1,16 +1,22 @@
+import os
+
 import anthropic
 
-client = anthropic.Anthropic()
+# Low effort keeps the demo snappy on stage.
+REQUEST = dict(max_tokens=16000, output_config={"effort": "low"})
 
-# Shared request settings. Low effort keeps the demo snappy on stage;
-# fallbacks re-run the request on another model if a safety classifier declines.
-REQUEST = dict(
-    model="claude-opus-5-5",
-    max_tokens=16000,
-    output_config={"effort": "low"},
-    betas=["server-side-fallback-2026-07-01"],
-    fallbacks="default",
-)
+if os.environ.get("ANTHROPIC_API_KEY"):
+    # Claude API: fallbacks re-run the request on another model if a safety classifier declines.
+    client = anthropic.Anthropic()
+    REQUEST |= dict(
+        model="claude-opus-5-5",
+        betas=["server-side-fallback-2026-07-01"],
+        fallbacks="default",
+    )
+else:
+    # No API key: use Amazon Bedrock with your current AWS credentials.
+    client = anthropic.AnthropicBedrockMantle(aws_region=os.environ.get("AWS_REGION", "us-east-1"))
+    REQUEST |= dict(model="anthropic.claude-opus-5-5")
 
 QUESTION = (
     "Hi, I'm anna@example.com. How many points do I have, and can I afford "
