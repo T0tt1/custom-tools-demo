@@ -5,8 +5,9 @@ A loyalty shop assistant. Claude can only look up a customer, check points, list
 ## Setup (do this before the session)
 
 ```bash
-cd ~/custom-tools-demo
-source .venv/bin/activate          # anthropic SDK is already installed here
+git clone https://github.com/T0tt1/custom-tools-demo && cd custom-tools-demo
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
 export ANTHROPIC_API_KEY=sk-ant-...
 python step2_manual_loop.py        # dry run once, so you know the network and key work
 ```
